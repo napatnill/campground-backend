@@ -43,7 +43,7 @@ const server = app.listen(
   console.log(
     "Server running in",
     process.env.NODE_ENV,
-    "on http://localhost:" + PORT
+    "on " + process.env.HOST + ":" + PORT
   )
 );
 
@@ -57,14 +57,16 @@ const swaggerOptions={
     },
     servers: [
       {
-        url: 'http://localhost:5000/api/v1'
+        // url: 'http://localhost:5000/api/v1'
+        url: process.env.HOST + ":" + PORT + "/api/v1"
       }
     ],
   },
   apis:['./routes/*.js'],
 };
 const swaggerDocs=swaggerJsDoc(swaggerOptions);
-app.use('/api-docs',swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+app.use('/api-docs',swaggerUI.serve, swaggerUI.setup(swaggerDocs, {customCssUrl: CSS_URL}));
 
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err, promise) => {
