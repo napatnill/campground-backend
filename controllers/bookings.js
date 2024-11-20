@@ -19,14 +19,14 @@ exports.getBookings = async (req, res, next) => {
         campground: campgroundId,
       }).populate({
         path: "campground",
-        select: "name address tel",
+        select: "name address tel picture",
       });
     } else {
       query = Booking.find({
         user: req.user.id,
       }).populate({
         path: "campground",
-        select: "name address tel",
+        select: "name address tel picture",
       });
     }
   } 
@@ -35,12 +35,12 @@ exports.getBookings = async (req, res, next) => {
     if (campgroundId) {
       query = Booking.find({ campground: campgroundId }).populate({
         path: "campground",
-        select: "name address tel",
+        select: "name address tel picture",
       });
     } else {
       query = Booking.find().populate({
         path: "campground",
-        select: "name address tel",
+        select: "name address tel picture",
       });
     }
   }
@@ -68,7 +68,7 @@ exports.getBooking = async (req, res, next) => {
   {
     booking = await Booking.findById(req.params.id).populate({
       path: "campground",
-      select: "name address tel",
+      select: "name address tel picture",
     });
     
     if (!booking) {
