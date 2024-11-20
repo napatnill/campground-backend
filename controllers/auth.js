@@ -5,18 +5,31 @@ const User = require("../models/User");
 //@access   Public
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, tel, password, role } = req.body;
+    const { name, email, tel, password } = req.body;
+
+    // Check if the email already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is already registered",
+      });
+    }
+
+    // Create the user if the email is unique
     const user = await User.create({
       name,
       email,
       tel,
       password,
-      role,
+      role: "user",
     });
+
     sendTokenResponse(user, 200, res);
   } catch (err) {
-    res.status(400).json({
+    res.status(500).json({
       success: false,
+      message: "Server error",
     });
     console.log(err.stack);
   }
